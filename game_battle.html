@@ -1,0 +1,329 @@
+<script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Functions and objects
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function getStat() //All stats can have a value between 3-18
+{
+  var die1 = Math.floor((Math.random() * 6) + 1);
+  var die2 = Math.floor((Math.random() * 6) + 1);
+  var die3 = Math.floor((Math.random() * 6) + 1);
+
+  return die1 + die2 + die3;
+}
+
+function getHP(profession) //Generate hit points depending on profession
+{ 
+  var hp = 0; //initialize the variable so program immediately knows data type
+
+  if(profession=="warrior") { hp = Math.floor((Math.random() * 10) + 1) + 5;} 
+  else {hp = Math.floor((Math.random() * 4) + 1) + 2;}
+
+  return hp;
+}
+
+function getWeapon(weapon) //Allow player to pick a weapon + bonus   
+{
+  if(weapon=="sword") return 6;
+
+  if(weapon=="axe") return 8;
+
+  if(weapon=="shield") return 4;
+
+  if(weapon=="flail") {return 10;}
+  else {return Math.floor((Math.random() * 20) + 1);} //Allow the surprise weapon to possibly deliver extremely low to extremely high max damage
+}
+
+//Characters with high dexterity gets rewarded with a bonus to 'percent chance to hit' calculation
+function getPThit(dexterity)
+{
+  if(dexterity > 11 && dexterity <= 14) {return 5; }       //add +5 bonus to PThit
+  else if(dexterity > 14 && dexterity <= 16) {return 10;}  //add +10 bonus to PThit
+  else if(dexterity > 16 && dexterity <= 17) {return 15;}  //add +15 bonus to PThit
+  else if(dexterity == 18) {return 20;}                    //add +20 bonus to PThit
+  else {return 0; }                                        //A value of 11 or less will get no bonus added to 'percent chance to hit' opponent
+}
+
+//Characters with high dexterity gets rewarded with a bonus to initiative
+//The player with the highest initiative score based on a role of a single 6-sided die will get to attack first
+//In the classic Dungeons & Dragons game initiative used a single 6-sided die instead of a coin toss to see who gets to attack first
+function getIB(dexterity)
+{
+  if(dexterity>15) {return 1; } //add +1 bonus to IB
+  else {return 0; } //no bonus
+}
+
+//Get proper pronound based on gender for use in story telling
+function getPronoun(gender)
+{
+  if(gender=="male") {return "his"}
+  else {return "her"}
+}
+
+//To make game interesting, display a random message when a player wins initiative
+//This is an opportunity to introduce the switch statement, which is an alternative to the if/else statement
+function displayRandomInitiativeMessage()
+{
+  var messageid = Math.floor((Math.random() * 6) + 1);
+  var message = "";
+  switch(messageid)
+  {
+    case 1:
+      message = "God speed!";
+      break;
+    case 2:
+      message = "Time stops all around as weapon is set in motion.";
+      break;
+    case 3:
+      message = "Faster than the speed of thought.";
+      break;
+    case 4:
+      message = "There will be blood!";
+      break;
+    case 5:
+      message = "No mercy shall be granted.";
+      break;
+    default:
+      message = "May the first strike end this battle before it even begins.";
+      break;
+  }   
+  return message;
+}
+
+//To make game interesting, display a random message when a player wins 
+//This is an opportunity to introduce the switch statement, which is an alternative to the if/else statement
+function displayRandomEndingMessage()
+{
+  var messageid = Math.floor((Math.random() * 6) + 1);
+  var message = "";
+  switch(messageid)
+  {
+    case 1:
+      message = "A lover avenged, yet the heart remains broken. Alas, is that a flower blooming next to the fallen? Such an unexpected treasure to find. So sweet the red, red, rose.  Time heals a broken heart, and that's just the way it goes.";
+      break;
+    case 2:
+      message = "Revenge turned out bittersweet.  Where do we go now, where do we go?  Perhaps it is time to lay down arms and finally sleep many well deserved dreamless nights.";
+      break;
+    case 3:
+      message = "Still not satisfied with the barely recognizable decapitated head in hand, our winner surveys the landscape. Looking further ahead the fallen enemy's stronghold can be seen behind thinly veiled by fog.  With blood still dripping from the weapon that delivered the fatal blow the winner loudly proclaims, 'I will kill them all!!!'";
+      break;
+    case 4:
+      message = "Today hope is with us.  Let peace be restored now that all followers of the fallen have dispersed without their leader.  Let us not ever take for granted the freedom that is once again ours.";
+      break;
+    case 5:
+      message = "No mercy shall be granted.  There are more of this ilk, and all followers of the fallen will be hunted to extinction. Let them run.  It shall make for good sport.";
+      break;
+    default:
+      message = "After a long silence, footsteps can be heard approaching the winner.  From a distant fog reveals an old friend, Pattani, venerable monk.  'It is time to finally go home my friend to meditate.  You are no longer weighed down by distractions, and can finally find the inner peace that you seek', he states with such a cheerful smile that it is hard to say no to.  The winner ponders, and then finally replies 'You are right Pattani, I can now finally seek inner peace'.";
+      break;
+  }   
+  return message;
+}
+
+//To make game interesting, display a random message when a player misses
+//This is an opportunity to introduce the switch statement, which is an alternative to the if/else statement
+function displayRandomMissedMessage()
+{
+  var messageid = Math.floor((Math.random() * 6) + 1);
+  var message = "";
+  switch(messageid)
+  {
+    case 1:
+      message = "Very sloppy!<br>";
+      break;
+    case 2:
+      message = "Must have have been distracted by someone's loud fart.<br>";
+      break;
+    case 3:
+      message = "Hopefully no one was watching.<br>";
+      break;
+    case 4:
+      message = "A mistake like this can get ya killed!<br>";
+      break;
+    case 5:
+      message = "Geez, my blind grandma has better hand-eye coordination.<br>";
+      break;
+    default:
+      message = "Perhaps it is not too late to switch professions.<br>";
+      break;
+  }   
+  return message;
+}
+
+function Character(profession,fullname,age,eyecolor,haircolor,height,weight,race,gender,skincolor,weapon)
+{
+  this.profession = profession; 
+  this.fullName   = fullname;
+  this.age        = age;
+  this.eyeColor   = eyecolor;
+  this.hairColor  = haircolor; 
+  this.height     = height; //use inches
+  this.weight     = weight; //use pounds
+  this.race       = race;
+  this.gender     = gender;
+  this.skincolor  = skincolor;
+  this.weapon     = weapon;  
+
+  //Below are the non-customizable properties.  We'll just randomly generate these values
+  this.Dexterity    = getStat();
+  this.Constitution = getStat();
+  this.Strength     = getStat();
+  this.Charisma     = getStat();
+  this.Wisdom       = getStat();
+  this.Intelligence = getStat();
+  this.Comeliness   = getStat();
+  this.IsQualified  = true; //a check to make sure stats allow character to be qualified
+  this.Hp           = getHP(this.profession);  
+  this.Damage       = getWeapon(weapon); 
+
+  this.PThit        = getPThit(this.Dexterity);
+  this.IB           = getIB(this.Dexterity);            
+
+  //check restrictions to qualify for warrior which is generally strong and healthy
+  if(this.profession=="warrior") 
+  {
+    if (this.Strength < 11 && this.profession=="warrior") this.IsQualified = false;
+    if (this.Constitution < 9 && this.profession=="warrior") this.IsQualified = false;
+  }  
+
+  //check restrictions to qualify for wizard which is generally smart but sickly
+  if(this.profession=="wizard")
+  {
+    if(this.Intelligence < 14 && this.profession=="wizard") this.IsQualified = false;
+    if(this.Strength < 9 && this.profession=="wizard") this.IsQualified = false;
+  }
+}
+
+function createCharacter() {
+ var profession = prompt("What is your profession?","warrior");
+ var fullname   = prompt("What is your name?","Conan");
+ var age        = parseInt(prompt("What is your age?","35"));
+ var eyecolor   = prompt("What is your eye color?","brown");
+ var haircolor  = prompt("What is your hair color?","black");
+ var height     = parseInt(prompt("What is your height in inches?","72"));
+ var weight     = parseInt(prompt("What is your weight in pounds?","225"));
+ var race       = prompt("What is your race?","human");
+ var gender     = prompt("What is your gender?","male");
+ var skincolor  = prompt("What is your skin color?","white");
+ var weapon     = prompt("What is your weapon of choice?","sword"); 
+
+ return new Character(profession.toLowerCase(),fullname,age,eyecolor,haircolor,height,weight,race,gender,skincolor,weapon);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Main process - Have fun with your story 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Ha ha! Avoided using an array by creating function called createCharacter and returning a new Character object
+alert("Let's create player1");
+var player1 = createCharacter(); 
+
+alert("Let's create player2");
+var player2 = createCharacter(); 
+
+document.write("It has been a grueling odessy, yet the boiling rage from within " + player1.fullName + " fuels each step towards finally reaching " + getPronoun(player1.gender) + " elusive enemy.<br>");
+document.write("Even from a distant horizon, " + player1.fullName + " recognizes the " + player2.hairColor + " hair flowing in the wind, and the piercing " + player2.eyeColor + " eyes staring back at " + getPronoun(player1.gender) + ".<br>"); 
+document.write("Today it will be " + player1.fullName + " seeking revenge against " + player2.fullName + ".<br>");
+document.write("The emnity between " + player1.fullName + " and " + player2.fullName + " is legendary.<br>");
+document.write("So familiar they are with each other that " + player2.fullName + " can sense that " + player1.fullName + " still has " + player1.Hp + " hit points.<br>");
+document.write(player1.fullName + " although somewhat exhausted can still sense that " + player2.fullName + " is going strong at " + player2.Hp + " hit points.<br>");
+document.write("There really is not much to say between the long time foes.<br>");
+document.write(player1.fullName + " draws " + getPronoun(player1.gender) + " " + player1.weapon + " which has tasted countless lives, while " + player2.fullName + " draws the cursed artifact " + player2.weapon + " so evil that no one near " + getPronoun(player2.gender) + " dares speak it's true name aloud.<br><br>");
+
+//check initiative
+var attacker1, attacker2;
+
+do //Do not allow a tie.  Somebody has to attack first!
+{
+  var initiative_player1 = (Math.floor((Math.random() * 6) + 1) + player1.IB);
+  var initiative_player2 = (Math.floor((Math.random() * 6) + 1) + player2.IB);
+} while(initiative_player1 == initiative_player2);
+
+document.write(player1.fullName + " has an initiative score of " + initiative_player1 + ".<br>");
+document.write(player2.fullName + " has an initiative score of " + initiative_player2 + ".<br><br>");
+
+if(initiative_player1 > initiative_player2)
+{
+  attacker1 = player1;
+  attacker2 = player2;
+}
+else 
+{
+  attacker1 = player2;
+  attacker2 = player1;
+}
+document.write(displayRandomInitiativeMessage() + " " + attacker1.fullName + " makes the first move!<br>");
+
+
+//Continue battle until one player survives
+while(attacker1.Hp > 0 && attacker2.Hp > 0)
+{
+  //initialize this reusable variable
+  var roll = 0; 
+  
+  //Check if attacker1 hits
+  roll = Math.floor((Math.random() * 100) + 1);
+
+  if(roll <= (25 + attacker1.PThit))
+  {
+    attacker2.Hp = attacker2.Hp - (Math.floor((Math.random() * attacker1.Damage) + 1));
+    document.write(attacker1.fullName + " has landed a hit!<br>"); 
+
+    if(attacker2.Hp > 0) 
+    {
+      document.write(attacker2.fullName + " has only " + attacker2.Hp + " hit points remaining.<br>");
+    }
+    else
+    {
+      if(attacker2.Hp <= -5)
+      {
+        document.write(attacker2.fullName + " also has lost " + getPronoun(attacker2.gender) + " head.<br>");
+      }
+      break; //leave this loop
+    }
+  }
+  else
+  {
+    document.write(attacker1.fullName + " missed! " + displayRandomMissedMessage() + "<br>");
+  }
+
+  //Check if attacker2 hits
+  roll = Math.floor((Math.random() * 100) + 1);
+
+  if(roll <= (25 + attacker2.PThit))
+  {
+    attacker1.Hp = attacker1.Hp - (Math.floor((Math.random() * attacker2.Damage) + 1));
+    document.write(attacker2.fullName + " has landed a hit!<br>"); 
+
+    if(attacker1.Hp > 0) 
+    {
+      document.write(attacker1.fullName + " has only " + attacker1.Hp + " hit points remaining.<br>");
+    }
+    else
+    {
+      if(attacker1.Hp <= -5)
+      {
+        document.write(attacker1.fullName + " also has lost " + getPronoun(attacker1.gender) + " head.<br>");
+      }
+      break; //leave this loop
+    }
+  }
+  else
+  {
+    document.write(attacker2.fullName + " missed! " + displayRandomMissedMessage() + "<br>");
+  }
+}
+
+//Identify the winner
+if(attacker1.Hp > attacker2.Hp) 
+{
+  document.write(attacker1.fullName + " wins!<br>");
+}
+else
+{
+  document.write(attacker2.fullName + " wins!<br>");
+}
+
+//Ending narrative
+document.write("<br>" + displayRandomEndingMessage() + "<br><br>THE END");
+</script>
