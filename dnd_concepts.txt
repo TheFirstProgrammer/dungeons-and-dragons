@@ -1,0 +1,67 @@
+https://geekdad.com/2015/02/original-dd-and-5th-edition/
+https://geekdad.com/2014/07/little-history-dd/
+https://www.amazon.com/gp/product/0615642047/ref=as_at/?imprToken=NWerGqNmGYtvrHXlnzBeHg&slotNum=0&ie=UTF8&camp=1789&creative=390957&creativeASIN=0615642047&linkCode=w61&tag=jamesfloydkel-20&linkId=CUOKARCQ3F4JNX4J
+http://www.therobotsvoice.com/2009/04/the_12_most_insane_old_school_dungeons_dragons_rul.php
+
+A forgotten thing about original DND is the consequence of time and not being automatically powered up. Bring back story telling, anthropology, history, etc.
+
+Game also integrates context decision making similar to Choose Your Own Adventures book
+
+Educational based on mythology, dimensions, math, science, culture, history, concepts, physics, trigonometry, geometry, calculus, chemistry, botany, herbs, forestry, etc.
+
+Each .js file is like a book:
+- Game engine.js
+- Player's Handbook.js
+- Dungeon Master Guide.js
+- Legends and Lore.js
+- WildernessSurvival.js
+- Fiend Folio.js
+- Unearthed Arcana.js
+- And more!
+
+Cite website forums, opinions, articles, etc.
+
+Reward players with art, stories, merchandise, etc. as they find them
+
+AI for NPC
+
+Room engine
+
+Passive activities in relation to time:
+- Food/drink
+- Aging
+- Healing w/o magic
+- Autosave if no save performed over 15 minutes
+- Random genaration of monsters or events based on time and percentages
+
+Unit test 
+- PC and NPC auto-generation
+- Manual generation
+ 
+Dynamically list options and allow users to submit commands to allow us to review and add for future players. The game will get "smarter" over time
+
+Heavy lifting will be with client-side code even for data updates until it is time to save in a database.  The goal is to just use the API for "save points" rather than being forced to keep up in real-time all the irrelevant happenings.  
+
+Dead characters can be found up to a limited time.
+
+Encumbrence is a real thing, so bag of holding would be valuable.
+
+Bard is handy NPC for lore and backup but can be killed.
+
+How to allow multiplayer online gaming?
+
+Verbs
+
+- Walk + direction, sneak, run, fly + direction, swim + direction, crawl + direction, climb + direction, look + direction, hide, disguise, seduce, 
+
+- weapon, grapple, pummel, throw
+
+- talk ask [keywords], answer [look for keywords], etc.
+
+- recruit
+- barter
+- buy/sell
+- 
+
+
+

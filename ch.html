@@ -1,0 +1,127 @@
+<script>
+
+    function rollDie(numberofsides)
+    {
+        return Math.floor((Math.random() * parseInt(numberofsides)) + 1);
+    }
+
+    function generatePropertyValue(characterClass,characterProperty)
+    {
+        var die1, die2, die3;
+        die1 = die2 = die3 = 0;
+        var strength, intelligence, constitution, wisdom, dexterity, charisma;
+        strength = intelligence = constitution = wisdom = dexterity = charisma = 0;
+        var ability_min, ability_max;
+
+        //define minimum and maximum values for each ability score
+        switch (characterClass.toLowerCase())
+        {
+            case "warrior":
+                switch (characterProperty.toLowerCase())
+                {
+                    case "strength":
+                        ability_min = 9;
+                        ability_max = 18;
+                        break;
+                    case "intelligence":
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                    default: //unknown ability with no min or max value requirement
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                }
+                break;
+            case "wizard":
+                switch (characterProperty.toLowerCase())
+                {
+                    case "strength":
+                        ability_min = 3;
+                        ability_max = 11;
+                        break;
+                    case "intelligence":
+                        ability_min = 11;
+                        ability_max = 18;
+                        break;
+                    default: //unknown ability with no min or max value requirement
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                }
+                break;
+            default: //unknown class with no constraints
+                switch (characterProperty.toLowerCase())
+                {
+                    case "strength":
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                    case "intelligence":
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                    default: //unknown ability with no min or max value requirement
+                        ability_min = 3;
+                        ability_max = 18;
+                        break;
+                }
+                break;
+        }
+
+        //strength
+        do
+        {
+            //Below simulates rolling three 6-sided dice
+            die1 = rollDie(6);
+            die2 = rollDie(6);
+            die3 = rollDie(6);
+
+            var dicesum = die1 + die2 + die3;
+
+            if (dicesum >= ability_min && dicesum <= ability_max)
+            {
+                return dicesum;
+            }
+        } while (dicesum < ability_min || dicesum > ability_max); //keep rolling dice until meets minimum requirement
+    }    
+
+    function generateCharacter(characterClass)
+    {
+      var myObject = new Object();
+      myObject.characterClass = characterClass;
+
+      //properties that you can set
+
+      var characterName = prompt("What is your character's name?","");
+      var hairColor = prompt("What is your hair color?","");
+      var eyeColor = prompt("What is your eye color?","");
+      var species = prompt("What is your species?","");
+      var height = prompt("What is your height?","");
+      var gender = prompt("What is your gender?","");
+      var weight = prompt("What is your weight?","");
+      var hairStyle = prompt("What is your hairstyle?","");
+
+      myObject.characterName = characterName;
+      myObject.hairColor = hairColor;
+      myObject.eyeColor = eyeColor;
+      myObject.species = species;
+      myObject.height = parseFloat(height); //convert to a float number
+      myObject.gender = gender;
+      myObject.weight = parseFloat(weight); //convert to a float number
+      myObject.hairStyle = hairStyle;
+
+      //properties that the program will set
+      myObject.strength     = generatePropertyValue(characterClass,"strength");
+      myObject.intelligence = generatePropertyValue(characterClass,"intelligence");
+      myObject.constitution = generatePropertyValue(characterClass,"constitution");
+      myObject.wisdom       = generatePropertyValue(characterClass,"wisdom");
+      myObject.dexterity    = generatePropertyValue(characterClass,"dexterity");
+      myObject.charisma     = generatePropertyValue(characterClass,"charisma"); 
+
+      console.log(myObject);
+    }
+
+    generateCharacter("warrior");
+    generateCharacter("wizard");
+</script>
